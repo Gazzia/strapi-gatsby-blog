@@ -57,6 +57,10 @@
     "author": {
       "via": "articles",
       "model": "writer"
+    },
+    "comments": {
+      "via": "article",
+      "collection": "comment"
     }
   }
 }
