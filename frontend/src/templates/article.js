@@ -47,7 +47,10 @@ const Article = ({ data }) => {
   const [comments, setComments] = useState([])
 
   const getTheCommentaires = () => {
-    fetch("https://blog-strapi-simplon.herokuapp.com/comments?article=" + article.strapiId)
+    fetch(
+      "https://blog-strapi-simplon.herokuapp.com/comments?article=" +
+        article.strapiId
+    )
       .then(res => res.json())
       .then(data => {
         const bob = data.map(comm => {
@@ -67,28 +70,28 @@ const Article = ({ data }) => {
   }
 
   const submitForm = (ev, id) => {
-	ev.preventDefault()
-	console.log("ev :>> ", ev)
-	const value = ev.target.commeUnGarconJaiLesCheveuxLongs.value
-	const author = ev.target.author.value
-	const object = {
-	  value,
-	  author,
-	  article: id,
-	}
-	fetch("https://blog-strapi-simplon.herokuapp.com/comments", {
-	  method: "POST",
-	  headers: {
-		"content-type": "application/json",
-	  },
-	  body: JSON.stringify(object),
-	})
-	  .then(res => res.json())
-	  .then(data => {
-		console.log("data :>> ", data)
-		getTheCommentaires();
-	  })
-	  .catch(err => console.error)
+    ev.preventDefault()
+    console.log("ev :>> ", ev)
+    const value = ev.target.commeUnGarconJaiLesCheveuxLongs.value
+    const author = ev.target.author.value
+    const object = {
+      value,
+      author,
+      article: id,
+    }
+    fetch("https://blog-strapi-simplon.herokuapp.com/comments", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(object),
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("data :>> ", data)
+        getTheCommentaires()
+      })
+      .catch(err => console.error)
   }
 
   useEffect(getTheCommentaires, [article])
@@ -130,22 +133,22 @@ const Article = ({ data }) => {
                 </p>
               </div>
               <hr />
-              <div className="comments">
-                <form
-                  className="commentForm"
-                  onSubmit={ev => submitForm(ev, article.strapiId)}
-                >
-                  <div className="label">Publier un commentaire:</div>
-                  <input type="text" name="author" placeholder="Auteur"></input>
-                  <input
-                    type="text"
-                    name="commeUnGarconJaiLesCheveuxLongs"
-                    placeholder="Commentaire"
-                  ></input>
-                  <button type="submit">Envoyer</button>
-                </form>
-                {comments}
-              </div>
+            </div>
+            <div className="comments">
+              <form
+                className="commentForm"
+                onSubmit={ev => submitForm(ev, article.strapiId)}
+              >
+                <div className="label">Publier un commentaire:</div>
+                <input type="text" name="author" placeholder="Auteur"></input>
+                <input
+                  type="text"
+                  name="commeUnGarconJaiLesCheveuxLongs"
+                  placeholder="Commentaire"
+                ></input>
+                <button type="submit">Envoyer</button>
+              </form>
+              {comments}
             </div>
           </div>
         </div>
