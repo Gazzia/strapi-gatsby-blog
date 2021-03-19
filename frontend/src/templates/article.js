@@ -1,9 +1,9 @@
-import React from "react";
-import { graphql } from "gatsby";
-import Img from "gatsby-image";
-import Moment from "react-moment";
-import Layout from "../components/layout";
-import Markdown from "react-markdown";
+import React, { useEffect, useState } from "react"
+import { graphql } from "gatsby"
+import Img from "gatsby-image"
+import Moment from "react-moment"
+import Layout from "../components/layout"
+import Markdown from "react-markdown"
 
 export const query = graphql`
   query ArticleQuery($slug: String!) {
@@ -33,16 +33,64 @@ export const query = graphql`
       }
     }
   }
-`;
+`
+
+const submitForm = (ev, id) => {
+  ev.preventDefault()
+  console.log("ev :>> ", ev)
+  const value = ev.target.commeUnGarconJaiLesCheveuxLongs.value
+  const author = ev.target.author.value
+  const object = {
+    value,
+    author,
+    article: id,
+  }
+  fetch("http://localhost:1337/comments", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(object),
+  })
+    .then(res => res.json())
+    .then(data => {
+      console.log("data :>> ", data)
+    })
+    .catch(err => console.error)
+}
 
 const Article = ({ data }) => {
-  const article = data.strapiArticle;
+  const article = data.strapiArticle
   const seo = {
     metaTitle: article.title,
     metaDescription: article.description,
     shareImage: article.image,
     article: true,
-  };
+  }
+
+  const [comments, setComments] = useState([])
+
+  const getTheCommentaires = () => {
+    fetch("http://localhost:1337/comments?article=" + article.strapiId)
+      .then(res => res.json())
+      .then(data => {
+        const bob = data.map(comm => {
+          const date = new Date(comm.published_at).toLocaleString("fr")
+          return (
+            <div className="comment">
+              <div className="top">
+                <div className="author">{comm.author}</div>
+                <div className="published_at">{date}</div>
+              </div>
+              <div className="value">{comm.value}</div>
+            </div>
+          )
+        })
+        setComments(bob)
+      })
+  }
+
+  useEffect(getTheCommentaires, [article])
 
   return (
     <Layout seo={seo}>
@@ -80,12 +128,29 @@ const Article = ({ data }) => {
                   <Moment format="MMM Do YYYY">{article.published_at}</Moment>
                 </p>
               </div>
+              <hr />
+              <div className="comments">
+                <form
+                  className="commentForm"
+                  onSubmit={ev => submitForm(ev, article.strapiId)}
+                >
+                  <div className="label">Publier un commentaire:</div>
+                  <input type="text" name="author" placeholder="Auteur"></input>
+                  <input
+                    type="text"
+                    name="commeUnGarconJaiLesCheveuxLongs"
+                    placeholder="Commentaire"
+                  ></input>
+                  <button type="submit">Envoyer</button>
+                </form>
+                {comments}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default Article;
+export default Article

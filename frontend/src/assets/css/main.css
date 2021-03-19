@@ -39,3 +39,27 @@ a {
 	opacity: 1 !important;
 	transition: opacity 0.25s cubic-bezier(0.39, 0.575, 0.565, 1) !important;
   }
+  .comments{
+	  border-top: 1px solid rgba(0, 0, 0, 0.109);
+	  padding-top: 25px;
+	  margin-top: 10px;
+  }
+  .comment+.comment{
+	  margin-top: 25px;
+  }
+  .comment{
+	  border-left: 1px dashed grey;
+	  padding-left: 10px;
+  }
+  .comment .top{
+	  display: flex;
+	  gap: 15px;
+	  margin-bottom: 5px;
+  }
+  .comment .top .author{
+	  font-weight:bold;
+  }
+  .comment .top .published_at{
+	  opacity: 0.8;
+	  font-style: italic;
+  }

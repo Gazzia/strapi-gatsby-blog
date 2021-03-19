@@ -19,10 +19,6 @@
       "type": "string",
       "required": true
     },
-    "date": {
-      "type": "datetime",
-      "required": true
-    },
     "article": {
       "model": "article",
       "via": "comments"
