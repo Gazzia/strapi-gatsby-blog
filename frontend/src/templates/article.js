@@ -35,30 +35,6 @@ export const query = graphql`
   }
 `
 
-const submitForm = (ev, id) => {
-  ev.preventDefault()
-  console.log("ev :>> ", ev)
-  const value = ev.target.commeUnGarconJaiLesCheveuxLongs.value
-  const author = ev.target.author.value
-  const object = {
-    value,
-    author,
-    article: id,
-  }
-  fetch("http://localhost:1337/comments", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(object),
-  })
-    .then(res => res.json())
-    .then(data => {
-      console.log("data :>> ", data)
-    })
-    .catch(err => console.error)
-}
-
 const Article = ({ data }) => {
   const article = data.strapiArticle
   const seo = {
@@ -71,7 +47,7 @@ const Article = ({ data }) => {
   const [comments, setComments] = useState([])
 
   const getTheCommentaires = () => {
-    fetch("http://localhost:1337/comments?article=" + article.strapiId)
+    fetch("https://blog-strapi-simplon.herokuapp.com/comments?article=" + article.strapiId)
       .then(res => res.json())
       .then(data => {
         const bob = data.map(comm => {
@@ -88,6 +64,31 @@ const Article = ({ data }) => {
         })
         setComments(bob)
       })
+  }
+
+  const submitForm = (ev, id) => {
+	ev.preventDefault()
+	console.log("ev :>> ", ev)
+	const value = ev.target.commeUnGarconJaiLesCheveuxLongs.value
+	const author = ev.target.author.value
+	const object = {
+	  value,
+	  author,
+	  article: id,
+	}
+	fetch("https://blog-strapi-simplon.herokuapp.com/comments", {
+	  method: "POST",
+	  headers: {
+		"content-type": "application/json",
+	  },
+	  body: JSON.stringify(object),
+	})
+	  .then(res => res.json())
+	  .then(data => {
+		console.log("data :>> ", data)
+		getTheCommentaires();
+	  })
+	  .catch(err => console.error)
   }
 
   useEffect(getTheCommentaires, [article])
